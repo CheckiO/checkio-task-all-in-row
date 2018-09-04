@@ -34,8 +34,15 @@ from checkio.referees import cover_codes
 from tests import TESTS
 
 cover_code = '''
+def make_iter(data):
+    for i in range(len(data)):
+        if type(data[i]) == list:
+            data[i] = make_iter(data[i])
+            data[i] = iter(data[i])
+    return data
+
 def cover(func, in_data):
-    res = func(iter(in_data))
+    res = func(iter(make_iter(in_data)))
     assert hasattr(res, '__iter__'), "your function should return the iterator object"
     assert hasattr(res, '__next__'), "your function should return the iterator object"
     return list(res)
